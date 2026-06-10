@@ -1,11 +1,13 @@
 import { FC } from "react";
-import { View, Text } from "react-native";
+import { Text } from "react-native";
+
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const AuthDataScreen: FC = () => {
     return (
-        <View>
+        <SafeAreaView>
             <Text>Auth data of Login</Text>
-        </View>
+        </SafeAreaView>
     )
 }
 
