@@ -1,18 +1,30 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import { useAppDispatch } from "../../store/store";
 import { setImageBase64 } from "../../store/auth.reducer";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Text, StyleSheet, View, TouchableOpacity, TextInput } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { useAppSelector } from "../../store/store";
+import { setIsAuth } from "../../store/auth.reducer";
+import { useFetch } from "../../hooks/useFetch";
 
 import Loader from "../../components/Loader";
 import ServerMessage from "../../components/ServerMessage";
 import ImageInput from "../../components/ImageInput";
 
+import { ICreateUserInput } from "../../types/request_input.types";
+import { ICreateUserOutput } from "../../types/request_output.types";
+
 const CreateUserScreen: FC = () => {
   const dispatch = useAppDispatch()
+
   const base = useAppSelector(state => state.auth.image_base64)
+  const email = useAppSelector(state => state.auth.email)
+
+  const axios = useFetch<ICreateUserInput, ICreateUserOutput>('POST', 'create-user')
+  const [serverMessage, setServerMessage] = useState<string>('')
+
+  const [disabled, setDisabled] = useState<boolean>(true)
 
   const [gender, setGender] = useState<"man" | "woman" | "not-chosen">(
     "not-chosen",
@@ -30,6 +42,41 @@ const CreateUserScreen: FC = () => {
   const on_clear = () => {
     dispatch(setImageBase64(null))
   }
+
+  const create_user = async () => {
+    const valid = email && gender !== 'not-chosen' && height && weight && purpose !== 'not-chosen' && base
+    if(!valid) {
+      setServerMessage('Не все данные введены')
+      return
+    }
+
+    const data = await axios.send({ email, gender, purpose, height: Number(height), weight: Number(weight), avatar: base })
+
+    if(axios.isError) {
+      setServerMessage(axios.error || 'Ошибка')
+      return
+    }
+
+    if(data) {
+      setServerMessage(data.message)
+      dispatch(setIsAuth(true))
+    }
+  }
+
+  useEffect(() => {
+    if(
+        email &&
+        gender !== 'not-chosen'
+        && height
+        && weight
+        && purpose !== 'not-chosen'
+        && base 
+    ) {
+        setDisabled(false)
+    } else {
+        setDisabled(true)
+    }
+  }, [gender, height, weight, purpose, base])
 
   return (
     <SafeAreaView style={styles.container}>
@@ -68,7 +115,7 @@ const CreateUserScreen: FC = () => {
           value={weight}
           onChangeText={(text) => {
             const onlyNumbs = text.replace(/[^0-9]/g, "")
-            setHeight(onlyNumbs)
+            setWeight(onlyNumbs)
           }}
            />
       </View>
@@ -90,7 +137,10 @@ const CreateUserScreen: FC = () => {
           <Text style={styles.text_labels}>Аватар:</Text>
           <ImageInput success_pick={success_pick} on_clear={on_clear} placeholder="Выберите фото"/>
       </View>
-      <Text>{base}</Text>
+      <TouchableOpacity style={disabled ? styles.disabled_button : styles.button} onPress={create_user} disabled={disabled}>
+        <Text style={disabled ? styles.disabled_button_text : styles.button_text}>Зарегистрироваться</Text>
+      </TouchableOpacity>
+      <ServerMessage isLoading={axios.isLoading} isSuccess={!axios.isError && !disabled}>{ serverMessage }</ServerMessage>
     </SafeAreaView>
   );
 };
@@ -152,6 +202,20 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginBottom: 5,
     alignItems: "center",
+  },
+  disabled_button: {
+    width: "100%",
+    padding: 20,
+    borderColor: "black",
+    backgroundColor: "rgb(83, 79, 80)",
+    borderWidth: 1,
+    borderRadius: 20,
+    marginBottom: 5,
+    alignItems: "center",
+  },
+  disabled_button_text: {
+    color: "black",
+    fontSize: 20,
   },
   button_text: {
     color: "white",

@@ -6,3 +6,11 @@ export interface IVerifyRegisterCodeInput {
     user_code: number,
     email: string
 }
+export interface ICreateUserInput {
+    email: string,
+    gender: 'man' | 'woman',
+    height: number,
+    weight: number,
+    purpose: 'plus' | 'minus',
+    avatar: string | null
+}
