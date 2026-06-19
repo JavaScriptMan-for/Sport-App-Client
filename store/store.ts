@@ -6,7 +6,7 @@ import app_slice from "./app.reducer"
 
 const store = configureStore({
   reducer: {
-    app: auth_slice,
+    app: app_slice,
     auth: auth_slice,
   },
 })

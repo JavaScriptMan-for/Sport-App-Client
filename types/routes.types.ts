@@ -29,6 +29,7 @@ export type RegisterStackParamList = {
   hello: undefined;
   form: undefined;
   code: undefined;
+  create_user: undefined
 };
 
 export type LoginStackParamList = {
