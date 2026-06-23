@@ -36,25 +36,26 @@ const AuthDataScreen: FC = () => {
             return
         }
 
-        const data = await send({ name, email }, {
+        const result = await send({ name, email }, {
             "Content-Type": "application/json"
         })
-
-        if (!data) {
-            set_server_message(error || "Ошибка")
+        if(!result.res) {
             return
         }
 
-        set_server_message(data.message || "Успешно")
-        console.log(data)
+        if (!result.ok) {
+            set_server_message(result.res.message || "Ошибка")
+            return
+        }
+
+        set_server_message(result.res.message || "Успешно")
 
         dispatch(setStateEmail(email))
         nav.navigate("code")
     }
     
     const back = () => {
-        // nav.goBack()
-         nav.navigate("create_user")
+        nav.goBack()
     }
 
     return (
@@ -82,7 +83,7 @@ const AuthDataScreen: FC = () => {
     )
 }
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
     form: {
         height: '90%',
         alignItems: 'center',

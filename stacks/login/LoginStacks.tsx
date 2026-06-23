@@ -7,12 +7,14 @@ const LoginStack = createNativeStackNavigator()
 
 import HelloScreen from "../../screens/login/HelloScreen";
 import AuthDataScreen from "../../screens/login/AuthDataScreen";
+import CodeScreen from "../../screens/login/CodeScreen";
 
 const LoginStacks: FC = () => {
     return (
     <LoginStack.Navigator screenOptions={{ headerShown: false }}>
         <LoginStack.Screen name="hello" component={HelloScreen} />
         <LoginStack.Screen name="form" component={AuthDataScreen} />
+        <LoginStack.Screen name="code" component={CodeScreen} />
     </LoginStack.Navigator>
     )
 }

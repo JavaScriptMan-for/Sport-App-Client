@@ -14,3 +14,10 @@ export interface ICreateUserInput {
     purpose: 'plus' | 'minus',
     avatar: string | null
 }
+export interface IResetCodeInput {
+    email: string,
+    action: 'register' | 'login'
+}
+export interface ILoginInput {
+    email: string
+}

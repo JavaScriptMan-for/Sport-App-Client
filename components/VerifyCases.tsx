@@ -1,4 +1,4 @@
-import { FC, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { View, TextInput, StyleSheet, Animated } from "react-native";
 import { useAppDispatch } from "../store/store";
 import { setFinalNumber } from "../store/app.reducer";
@@ -29,7 +29,6 @@ const VerifyCases: FC = () => {
       inputs.current[index - 1].focus();
     }
   };
-  
 
   const handleFocus = (index: number) => {
     Animated.timing(animations[index], {
@@ -39,6 +38,9 @@ const VerifyCases: FC = () => {
     }).start();
   };
 
+  useEffect(() => {
+    inputs.current[0].focus()
+  }, [inputs])
 
   return (
     <View style={styles.container}>

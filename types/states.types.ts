@@ -1,5 +1,5 @@
 export interface AuthStateType {
-    isAuth: boolean,
+    isAuth: boolean | null,
     email: string | null,
     image_base64: string | null
 }

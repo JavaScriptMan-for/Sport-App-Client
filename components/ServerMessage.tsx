@@ -4,7 +4,7 @@ import { View, Text, StyleSheet } from "react-native";
 interface Props {
     children: ReactNode,
     isSuccess: boolean,
-    isLoading: boolean
+    isLoading: boolean | null
 }
 
 const ServerMessage: FC<Props> = ({ children, isSuccess, isLoading }) => {

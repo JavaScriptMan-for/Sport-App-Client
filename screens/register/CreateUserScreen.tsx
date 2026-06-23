@@ -8,12 +8,13 @@ import { useAppSelector } from "../../store/store";
 import { setIsAuth } from "../../store/auth.reducer";
 import { useFetch } from "../../hooks/useFetch";
 
-import Loader from "../../components/Loader";
 import ServerMessage from "../../components/ServerMessage";
 import ImageInput from "../../components/ImageInput";
 
 import { ICreateUserInput } from "../../types/request_input.types";
 import { ICreateUserOutput } from "../../types/request_output.types";
+
+import * as SecureStore from 'expo-secure-store';
 
 const CreateUserScreen: FC = () => {
   const dispatch = useAppDispatch()
@@ -50,15 +51,27 @@ const CreateUserScreen: FC = () => {
       return
     }
 
-    const data = await axios.send({ email, gender, purpose, height: Number(height), weight: Number(weight), avatar: base })
+    const result = await axios.send({ email, gender, purpose, height: Number(height), weight: Number(weight), avatar: base })
 
-    if(axios.isError) {
-      setServerMessage(axios.error || 'Ошибка')
+    if(!result.res || !result.headers) return
+
+
+    if(!result.ok) {
+      setServerMessage(result.res.message || 'Ошибка')
       return
     }
 
-    if(data) {
-      setServerMessage(data.message)
+    if(result) {
+      setServerMessage(result.res.message)
+      const cookies = result.headers.get('set-cookie');
+      
+      const cookie_string = cookies?.split(";")[0]
+      const refresh_token = cookie_string?.split("=")[1]
+      
+      if(!refresh_token) return
+      
+      await SecureStore.setItemAsync("access_token", result.res.access_token)
+      await SecureStore.setItemAsync('refresh_token', refresh_token)
       dispatch(setIsAuth(true))
     }
   }

@@ -2,9 +2,7 @@ declare module "expo-constants" {
   // Типизация extra — твои переменные окружения
   export interface Extra {
     API_PROTO: string;
-    // добавляй сюда любые другие переменные
-    // API_KEY?: string;
-    // ENV?: "dev" | "prod";
+    DOMAIN: string
   }
 
   // expoConfig — старый API (есть в рантайме, нет в типах)

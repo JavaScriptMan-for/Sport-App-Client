@@ -3,27 +3,27 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useAppSelector, useAppDispatch } from "../../store/store";
 import { useFetch } from "../../hooks/useFetch";
 import { setFinalNumber } from "../../store/app.reducer";
-import { useNavigation } from "@react-navigation/native";
+import * as SecureStore from 'expo-secure-store';
 
 import { Text, StyleSheet, View } from "react-native";
 import VerifyCases from "../../components/VerifyCases";
 import ServerMessage from "../../components/ServerMessage";
 
-import { RegisterNav } from "../../types/routes.types";
-import { IOnlyMessage } from "../../types/request_output.types";
+import { ILoginOutput } from "../../types/request_output.types";
 import { IVerifyRegisterCodeInput } from "../../types/request_input.types";
 import ResendCode from "../../components/ResetCode";
+import { setIsAuth } from "../../store/auth.reducer";
 
 const CodeScreen: FC = () => {
     const dispatch = useAppDispatch()
-    const nav = useNavigation<RegisterNav>()
+
     const state_email = useAppSelector(state => state.auth.email)
     const finallyCode = useAppSelector(state => state.app.finalNumber)
 
     const [validateErrors, setValidateErrors] = useState<boolean>(false)
     const [serverMessage, setServerMessage] = useState<string>('')
 
-    const axios = useFetch<IVerifyRegisterCodeInput, IOnlyMessage>('POST', 'verify-register')
+    const axios = useFetch<IVerifyRegisterCodeInput, ILoginOutput>('POST', 'verify-login')
 
     const onFinallyCode = async () => {
     
@@ -50,7 +50,8 @@ const CodeScreen: FC = () => {
     // Успех
     if (result) {
         setServerMessage(result.res.message)
-        nav.navigate('create_user')
+        await SecureStore.setItemAsync("access_token", result.res.access_token)
+        dispatch(setIsAuth(true))
     }
 }
 
@@ -78,7 +79,7 @@ const CodeScreen: FC = () => {
                 <Text style={styles.sub_text}>{hashed_email(state_email || 'unknown')}</Text>
             </View>
            <VerifyCases /> 
-          {state_email && <ResendCode email={state_email} action="register"/> }
+          {state_email && <ResendCode email={state_email} action="login"/> }
            <ServerMessage isLoading={axios.isLoading} isSuccess={!axios.isError && !validateErrors}>{ serverMessage }</ServerMessage>
         </SafeAreaView>
     )

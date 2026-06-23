@@ -49,6 +49,7 @@ export type  RootStackParamList = {
 // --- NAVIGATION TYPE ---
 
 export type RegisterNav = NativeStackNavigationProp<RegisterStackParamList>
+export type LoginNav = NativeStackNavigationProp<LoginStackParamList>
 
 export type NavType<T extends keyof RootStackParamList> =
   NativeStackNavigationProp<RootStackParamList, T>;

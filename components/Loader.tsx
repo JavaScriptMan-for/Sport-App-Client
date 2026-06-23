@@ -2,7 +2,7 @@ import { FC } from "react";
 import { ActivityIndicator} from "react-native";
 
 interface Props {
-    showed: boolean
+    showed: boolean | null
 }
 
 const Loader: FC<Props> = ({ showed }) => {
