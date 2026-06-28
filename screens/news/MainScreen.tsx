@@ -1,12 +1,12 @@
 import { FC } from "react";
 import { View, Text } from "react-native";
 
-const SettingsScreen: FC = () => {
+const MainScreen: FC = () => {
     return (
         <View>
-            <Text>Settings screen</Text>
+            <Text>MainScreen of NewsStack</Text>
         </View>
     )
 }
 
-export default SettingsScreen
+export default MainScreen

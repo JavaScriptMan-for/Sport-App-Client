@@ -49,6 +49,7 @@ export const useFetch = <B = undefined, T = undefined>(
       setIsLoading(false);
       return { res, headers: response_headers, ok: true };
     } catch (err) {
+      console.log(err)
       setIsError(true);
       setError("Ошибка сети");
       setIsLoading(false);

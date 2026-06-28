@@ -10,7 +10,7 @@ const HomeIcon: FC<Props> = ({ focused }) => {
      <Svg width={24} height={24} viewBox="0 0 24 24">
         <Path
           d="M3 12L12 3L21 12H17V21H7V12H3Z"
-          fill={focused ? "#4F46E5" : "#9CA3AF"}
+          fill={focused ? "rgb(130, 0, 28)" : "#9CA3AF"}
         />
       </Svg>
     )

@@ -24,7 +24,9 @@ const AuthDataScreen: FC = () => {
     const nav = useNavigation<LoginNav>()
 
     const next = async () => {
+
         const result = await login_fetch.send({ email })
+        console.log(result)
 
         if(!result.res) {
             setServerMessage("Ошибка")

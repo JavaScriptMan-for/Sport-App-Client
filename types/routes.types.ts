@@ -5,22 +5,39 @@ import { NavigatorScreenParams } from "@react-navigation/native";
 
 export type HomeStackParamList = {
   main: undefined;
+  my_workouts: undefined;
+  streak: undefined
 };
 
-export type DetailsStackParamList = {
+export type NewsStackParamList = {
   main: undefined;
 };
+
+export type StatisticStackParamList = {
+  main: undefined
+}
+
+export type CreateWorkoutStackParamList = {
+  main: undefined
+}
 
 export type SettingsStackParamList = {
   main: undefined;
 };
 
+export type ProfileStackParamList = {
+  main: undefined
+}
+
 // --- TABS ---
 
 export type MainTabParamList = {
   home: NavigatorScreenParams<HomeStackParamList>;
-  details: NavigatorScreenParams<DetailsStackParamList>;
+  news: NavigatorScreenParams<NewsStackParamList>;
+  statistic: NavigatorScreenParams<StatisticStackParamList>;
+  create_workout: NavigatorScreenParams<CreateWorkoutStackParamList>;
   settings: NavigatorScreenParams<SettingsStackParamList>;
+  profile: NavigatorScreenParams<ProfileStackParamList>
 };
 
 // --- AUTH STACKS ---
