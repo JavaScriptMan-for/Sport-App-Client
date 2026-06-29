@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeIcon from "../assets/icons/home";
 import NewsIcon from "../assets/icons/news"
 import StatisticsIcon from "../assets/icons/statistic";
+import CreateWorkoutIcon from "../assets/icons/create_workout";
 import SettingsIcon from "../assets/icons/settings";
 
 import HomeStacks from "../stacks/main/Home.stack";
@@ -23,7 +24,7 @@ const MainTabs: FC = () => {
     <>
       <Tab.Navigator
         screenOptions={{
-          headerShown: true,
+          headerShown: false,
           tabBarActiveTintColor: "rgb(130, 0, 28)",
           tabBarInactiveTintColor: "#9CA3AF", 
         }}
@@ -64,7 +65,7 @@ const MainTabs: FC = () => {
           options={{
             title: "Тренировки",
             tabBarIcon: ({ focused }) => (
-               <StatisticsIcon focused={focused}/>
+               <CreateWorkoutIcon focused={focused}/>
             ),
           }}
           />

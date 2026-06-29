@@ -18,7 +18,9 @@ export type StatisticStackParamList = {
 }
 
 export type CreateWorkoutStackParamList = {
-  main: undefined
+  main: undefined,
+  create_custom_workout: undefined,
+  choose_ready_workout: undefined
 }
 
 export type SettingsStackParamList = {
@@ -57,13 +59,16 @@ export type LoginStackParamList = {
 
 // --- ROOT STACK ---
 
-export type  RootStackParamList = {
+export type RootStackParamList = {
   register: NavigatorScreenParams<RegisterStackParamList>;
   login: NavigatorScreenParams<LoginStackParamList>;
   main: NavigatorScreenParams<MainTabParamList>;
 }
 
 // --- NAVIGATION TYPE ---
+
+export type MainNav = NativeStackNavigationProp<MainTabParamList>
+
 
 export type RegisterNav = NativeStackNavigationProp<RegisterStackParamList>
 export type LoginNav = NativeStackNavigationProp<LoginStackParamList>

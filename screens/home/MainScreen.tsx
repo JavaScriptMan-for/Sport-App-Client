@@ -6,36 +6,35 @@ import { useAppSelector } from "../../store/store";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import sport_man from "../../assets/img/sport_man.jpg"
+import sport_man from "../../assets/img/sport_man.jpeg"
 
 import Streak from "../../components/Streak";
 
 const MainScreen: FC = () => {
     const auth_data = useAppSelector(state => state.app.auth_data)
 
-    const animate_position = useRef(new Animated.Value(-100)).current
+    const animate_opacity = useRef(new Animated.Value(0)).current
 
     useFocusEffect(
     useCallback(() => {
-        animate_position.setValue(-100);
+        animate_opacity.setValue(0);
 
-        Animated.timing(animate_position, {
-            toValue: 0,
+        Animated.timing(animate_opacity, {
+            toValue: 1,
             duration: 700,
-            useNativeDriver: false
+            useNativeDriver: true
         }).start();
     }, [])
 );
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={styles.container}>
             <ScrollView>
-            <Image source={sport_man}/>
+                <Image style={styles.main_img} source={sport_man}/>
             <Animated.View
-                style={{marginLeft: animate_position}}
+                style={{opacity: animate_opacity}}
             >
                 <Text style={styles.main_text}>Добро пожаловать в Sport App</Text>
-                <Text>Привет {auth_data?.name}</Text>
             </Animated.View>
             <Streak /> 
             </ScrollView>
@@ -44,8 +43,16 @@ const MainScreen: FC = () => {
 }
 
 const styles = StyleSheet.create({
+    container: {
+        
+    },
     main_text: {
-        fontSize: 30
+        fontSize: 30,
+        fontWeight: 600,
+    },
+    main_img: {
+        width: '100%',
+        height: 780,
     }
 })
 
