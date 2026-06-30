@@ -1,10 +1,16 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState, useCallback } from "react";
 import * as SecureStore from 'expo-secure-store';
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, StyleSheet, Image } from "react-native";
+
+import { useNavigation } from "@react-navigation/native";
+import { MainNav } from "../types/routes.types";
+
+import fire_img from "../assets/img/fire.png"
 
 const Streak: FC = () => {
-
   const [streak, setStreak] = useState<number>(0);
+
+  const nav = useNavigation<MainNav>()
 
   function daysBetween(date1: string, date2: string): number {
     const d1 = new Date(date1);
@@ -52,11 +58,60 @@ const Streak: FC = () => {
     getStreak();
   }, []);
 
+  const onClick = () => {
+    nav.navigate("home", { screen: 'streak' })
+  }
+
+  const casesDays = useCallback((streak_arg: number): string => {
+    const days = String(streak_arg)
+
+    const last_num: string = days.at(-1) || '1'
+
+    const number_last_num = parseInt(last_num)
+
+    if(number_last_num === 1) {
+      return 'день'
+    } else if(number_last_num > 1 && number_last_num < 5) {
+      return 'дня'
+    } else {
+      return 'дней'
+    }
+  }, [streak])
+
   return (
-    <View>
-      <Text>{ streak }</Text>
-    </View>
+    <TouchableOpacity style={styles.container} onPress={onClick}>
+      <Text style={styles.h_text}>Вы тренируетесь подряд уже</Text>
+      <Text style={styles.streak_text}>{streak} {casesDays(streak)}</Text> 
+      <Image style={styles.fire} source={fire_img}/>
+    </TouchableOpacity>
   );
 };
 
 export default Streak;
+
+
+const styles = StyleSheet.create({
+  container: {
+    borderRadius: 150,
+    borderWidth: 5,
+    borderColor: 'rgb(130, 0, 28)',
+    width: 250,
+    height: 250,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10,
+  },
+  h_text: {
+    fontSize: 20,
+    fontWeight: 600,
+    textAlign: 'center'
+  },
+  streak_text: {
+    fontSize: 18,
+    fontWeight: 400
+  },
+  fire: {
+    width: 30,
+    height: 30
+  }
+})

@@ -16,15 +16,16 @@ import * as SecureStore from 'expo-secure-store';
 import { useFetch } from "./hooks/useFetch";
 import { useAppDispatch } from "./store/store";
 import { setIsAuth } from "./store/auth.reducer";
-import { IOnlyMessage } from "./types/request_output.types";
+import { setAuthData } from "./store/app.reducer";
+import { IAuthRequestOutput } from "./types/request_output.types";
 
 
 const Navigation: FC = () => {
     const isAuth = useAppSelector(state => state.auth.isAuth)
     const dispatch = useAppDispatch()
 
-    const auth_fetch = useFetch<undefined, IOnlyMessage>('GET', 'auth')
-    const refresh_fetch = useFetch<{ refresh_token: string }, IOnlyMessage>('POST', 'refresh')
+    const auth_fetch = useFetch<undefined, IAuthRequestOutput>('GET', 'auth')
+    const refresh_fetch = useFetch<{ refresh_token: string }, IAuthRequestOutput>('POST', 'refresh')
 
     const [isLoading, setIsLoading] = useState<boolean | null>(null)
 
@@ -41,10 +42,15 @@ const Navigation: FC = () => {
         "Authorization": `Bearer ${access_token}`
       })
 
+      if(!r.res) {
+        dispatch(setIsAuth(false))
+        return
+      }
       
       if(r.ok) {
         console.log(r.res?.message)
         dispatch(setIsAuth(true))
+        dispatch(setAuthData(r.res?.auth_data))
         return
       }
 
@@ -85,15 +91,15 @@ const Navigation: FC = () => {
         "Authorization": `Bearer ${new_access_token}`
       })
 
-      if(!r_2.ok) {
+      if(!r_2.ok || !r_2.res?.auth_data) {
         dispatch(setIsAuth(false))
         return
       }
       if(r_2.ok) {
         console.log("Успешная авторизация")
         dispatch(setIsAuth(true))
-      }
-     
+        dispatch(setAuthData(r_2.res.auth_data))
+      }    
     }
 
     useEffect(() => {

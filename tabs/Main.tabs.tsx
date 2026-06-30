@@ -8,12 +8,14 @@ import NewsIcon from "../assets/icons/news"
 import StatisticsIcon from "../assets/icons/statistic";
 import CreateWorkoutIcon from "../assets/icons/create_workout";
 import SettingsIcon from "../assets/icons/settings";
+import ProfileIcon from "../assets/icons/profile";
 
 import HomeStacks from "../stacks/main/Home.stack";
 import NewsStacks from "../stacks/main/News.stack";
 import StatisticStacks from "../stacks/main/Statistic.stack";
-import SettingsStacks from "../stacks/main/Settings.stacks";
 import CreateWorkoutStacks from "../stacks/main/CreateWorkout.stack";
+import SettingsStacks from "../stacks/main/Settings.stacks";
+import ProfileStacks from "../stacks/main/Profile.stack";
 
 
 
@@ -73,9 +75,20 @@ const MainTabs: FC = () => {
          name="settings"
          component={SettingsStacks}
          options={{
+          title: 'Настройки',
           tabBarIcon({ focused }) {
             return <SettingsIcon focused={focused}/>
           },
+         }}
+           />
+          <Tab.Screen
+         name="profile"
+         component={ProfileStacks}
+         options={{
+          title: 'Профиль',
+          tabBarIcon({ focused }) {
+            return <ProfileIcon focused={focused}/>
+          }
          }}
            />
       </Tab.Navigator>

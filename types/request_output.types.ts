@@ -1,3 +1,5 @@
+import { IAuthData } from "./auth_data.type"
+
 export type IOnlyMessage = { message: string }
 
 export interface ICreateUserOutput {
@@ -8,4 +10,9 @@ export interface ICreateUserOutput {
 export interface ILoginOutput {
     access_token: string,
     message: string
+}
+
+export interface IAuthRequestOutput {
+    message: string,
+    auth_data: IAuthData
 }
