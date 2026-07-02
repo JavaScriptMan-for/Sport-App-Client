@@ -1,21 +1,24 @@
 import { FC,  ReactNode,  useMemo, useState, memo } from "react";
-import { Text, View, StyleSheet, Image, FlatList, TouchableOpacity, Dimensions } from "react-native";
+import { Text, View, StyleSheet, Image, FlatList, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CircleIcon from "../../assets/icons/circle";
 
-import { workouts, images } from "../../objects/exercise";
-import { useAppSelector } from "../../store/store";
 
+import { workouts, images } from "../../objects/exercise";
+import { useAppSelector, useAppDispatch } from "../../store/store";
+import { fullFilterExercises } from "../../store/search.reducer";
 import SearchExercises from "../../components/SearchExercises";
 
 const CreateCustomWorkout: FC = () => {
   const auth_data = useAppSelector((state) => state.app.auth_data);
+  const filtered_workouts = useAppSelector(state => state.search.filtered_workouts)
+
   const [buttonIds, setButtonIds] = useState<number[]>([])
 
   const workouts_memo = useMemo(() => workouts, [workouts]);
   const images_memo = useMemo(() => images, [images]);
+  const colors = useMemo(() => ['rgb(40, 154, 37)', 'rgb(130, 0, 28)', 'rgb(20, 20, 20)', 'rgb(230, 216, 34)'], [])
 
-  const colors = useMemo(() => ['rgb(40, 154, 37)', 'rgb(130, 0, 28)', 'rgb(20, 20, 20)', 'green'], [])
 
   const open_more_details = (name: string) => {
 
@@ -36,9 +39,10 @@ const CreateCustomWorkout: FC = () => {
   return (
     <SafeAreaView>
       <Text style={styles.appeal_text}>{auth_data?.name}, Вы можете создать свою тренировку</Text>
+      <SearchExercises />
       <FlatList
         style={styles.container}
-        data={workouts_memo}
+        data={filtered_workouts}
         keyExtractor={(item) => `block_${item.id}`}
         numColumns={2}
         renderItem={({ item }) => (
@@ -77,18 +81,19 @@ const CreateCustomWorkout: FC = () => {
            onPress={() => add_exercise(item.id)}
            
            >
-          <Text style={styles.button_text}>{buttonIds.includes(item.id) ? '-' : '+'}</Text>
+          <Text style={styles.button_text}>{buttonIds.includes(item.id) ? '—' : '+'}</Text>
           </TouchableOpacity>
           </View>
         )}
       />
       <CustomModal show={buttonIds.length > 0}>
         <Text style={styles.modal_title}>Выбрано упражнений:</Text>
-        <View style={{ flexDirection: 'row', gap: 5 }}>
-          <TouchableOpacity onPress={clear_exercises}><Text>✕</Text></TouchableOpacity>
+        <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
+          <TouchableOpacity onPress={clear_exercises}><Text style={{fontWeight: 900}}>✕</Text></TouchableOpacity>
           <Text style={styles.modal_count}>{buttonIds.length}</Text>
         </View>      
       </CustomModal>
+      {workouts_memo.length < 1 && <Text style={styles.not_found_text}>Ничего не найдено</Text>}
     </SafeAreaView>
   );
 };
@@ -152,6 +157,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgb(50, 50, 50)',
     paddingTop: 10,
     paddingBottom: 10,
+    minHeight: '75%'
   },
   appeal_text: {
     fontSize: 25,
@@ -233,10 +239,10 @@ const styles = StyleSheet.create({
     modal: {
       position: 'absolute',
       width: '100%',
-      padding: 5,
+      padding: 10,
       height: 50,
       borderRadius: 5,
-       backgroundColor: 'rgb(187, 187, 187)',
+      backgroundColor: 'rgb(187, 187, 187)',
 
       marginBottom: 50,
       flexDirection: 'row',
@@ -250,14 +256,23 @@ const styles = StyleSheet.create({
     modal_count: {
       textAlign: 'center',
       color: 'white',
-      fontSize: 18,
+      fontSize: 17,
       fontWeight: 600,
-      backgroundColor: 'red',
+      backgroundColor: 'rgb(131, 5, 31)',
       borderRadius: 30,
       padding: 10,
       width: 42,
       height: 42
-    }
+    },
+    not_found_text: {
+      color: 'white',
+      marginTop: '80%',
+      marginLeft: '30%',
+      textAlign: 'center',
+      fontSize: 20,
+      fontWeight: 600,
+      position: 'absolute' 
+      }
   });
 
 export default CreateCustomWorkout;

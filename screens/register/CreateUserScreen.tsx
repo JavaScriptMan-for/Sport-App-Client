@@ -15,6 +15,7 @@ import { ICreateUserInput } from "../../types/request_input.types";
 import { ICreateUserOutput } from "../../types/request_output.types";
 
 import * as SecureStore from 'expo-secure-store';
+import { setAuthData } from "../../store/app.reducer";
 
 const CreateUserScreen: FC = () => {
   const dispatch = useAppDispatch()

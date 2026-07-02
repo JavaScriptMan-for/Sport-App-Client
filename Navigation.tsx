@@ -104,7 +104,7 @@ const Navigation: FC = () => {
 
     useEffect(() => {
       checkAuth()
-    }, [])
+    }, [isAuth])
 
     useEffect(() => {
       setIsLoading(auth_fetch.isLoading)
